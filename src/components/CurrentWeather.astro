@@ -1,126 +1,98 @@
 ---
 // import type { WeatherData } from '../types/weather';
 import { Image } from "astro:assets";
-
-
-
+import AppFooter from "./AppFooter.astro";
 ---
 
-<section class="current-weather-section flex h-181 md:h-full w-full">
-	<article
-		class="hero-card relative flex h-full w-full flex-col overflow-hidden p-9"
-	>
-		<img
-			id="hero-bg"
-			src="/assets/bg-laptop/Property 1=sunny.svg"
-			alt=""
-			aria-hidden="true"
-			class="absolute inset-0 z-0 h-full w-full object-cover object-top"
-		/>
+<section class="current-weather-section flex md:h-full w-full">
+  <article
+    class="hero-card @container relative flex h-full w-full flex-col overflow-hidden p-9 pb-0 md:pb-9"
+  >
+    <img
+      id="hero-bg"
+      src="/assets/bg-laptop/Property 1=sunny.svg"
+      alt=""
+      aria-hidden="true"
+class="absolute inset-0 z-0 h-full w-full p-2 object-cover object-top rounded-[80px] md:rounded-t-[80px] md:rounded-b-none shadow-inner shadow-black/50"    />
 
-		<div class="m-4">
-			<header class="relative z-1 flex items-center justify-center gap-1 mt-3">
-				<button
-					id="favorite-toggle"
-					class="transition hover:scale-110 hover:opacity-80"
-					aria-label="Toggle Favorite"
-				>
-					<img
-						id="fav-icon-default"
-						src="/assets/icons/fav=default.svg"
-						alt="Favorite Icon"
-						class="min-h-10 min-w-10 object-contain"
-					/>
-					<img
-						id="fav-icon-active"
-						src="/assets/icons/fav=blue-clicked.svg"
-						alt="Favorited Icon"
-						class="hidden min-h-10 min-w-10 object-contain"
-					/>
-				</button>
-				<h2
-					id="hero-city-name"
-					class="text-3xl xl:text-4xl font-medium tracking-tight opacity-80"
-				>
-					Vancouver
-				</h2>
-			</header>
+    <!-- Sizes use cqw (% of the card's content width) so the text and icon scale with the card -->
+    <div class="relative z-20 mt-2 flex flex-col items-center">
+      <header class="flex items-center justify-center gap-2">
+        <button
+          id="favorite-toggle"
+          class="shrink-0 transition hover:scale-110 hover:opacity-80"
+          aria-label="Toggle Favorite"
+        >
+          <img
+            id="fav-icon-default"
+            src="/assets/icons/fav=default.svg"
+            alt="Favorite Icon"
+            class="size-[clamp(2rem,10cqw,2.75rem)] object-contain"
+          />
+          <img
+            id="fav-icon-active"
+            src="/assets/icons/fav=blue-clicked.svg"
+            alt="Favorited Icon"
+            class="hidden size-[clamp(2rem,10cqw,2.75rem)] object-contain"
+          />
+        </button>
+        <h2
+          id="hero-city-name"
+          class="text-[clamp(1.5rem,10cqw,2.5rem)] leading-tight font-medium tracking-tight opacity-80 text-center"
+        >
+          Vancouver
+        </h2>
+      </header>
 
-			<div class="relative z-20 mt-4 flex md:flex-col xl:flex-row items-center justify-between">
-				<div class="flex flex-col">
-					<h1 class="text-6xl font-semibold tracking-tighter opacity-80">
-						<span id="hero-temp-main">18</span><span
-							class="text-4xl text-slate-700"></span>
-					</h1>
-					<div>
-						<p class="mt-1 pl-1.5 text-lg opacity-70">
-							<span id="top-date-time">Mon Date, Time</span>
-						</p>
-					</div>
-					<div class="flex items-center pl-1 gap-3 text-base opacity-80">
-						<span class="flex items-center gap-1">
-							<img src="/assets/icons/umbrella.svg" class="h-4 w-4 opacity-80" alt="Rain" />
-							<span id="hero-precipitation">10%</span>
-						</span>
-						<span class="text-slate-400">|</span>
-						<span class="flex items-center gap-1">
-							<img src="/assets/icons/famicons_snow.svg" class="h-4 w-4 opacity-80" alt="Snow" />
-							<span id="hero-snowfall">10%</span>
-						</span>
-					</div>
-				</div>
+      <!-- Temperature + icon stay together, centered. md–lg the card is narrow, so they stack. -->
+      <div
+        class="mt-4 flex items-center justify-center gap-[2cqw] md:flex-col md:gap-0 xl:flex-row xl:gap-[2cqw]"
+      >
+        <div class="flex flex-col items-start md:items-center xl:items-start">
+          <h1 class="text-[clamp(3rem,20cqw,5rem)] leading-none font-semibold tracking-tighter opacity-80">
+            <span id="hero-temp-main">18</span>
+          </h1>
+          <p class="mt-2 text-[clamp(0.875rem,5cqw,1.125rem)] opacity-70">
+            <span id="top-date-time">Mon Date, Time</span>
+          </p>
+          <div class="mt-1 flex items-center gap-3 text-[clamp(0.875rem,5cqw,1.125rem)] opacity-80">
+            <span class="flex items-center gap-1">
+              <img src="/assets/icons/umbrella.svg" class="size-[1em] opacity-80" alt="Rain" />
+              <span id="hero-precipitation">10%</span>
+            </span>
+            <span class="text-slate-400">|</span>
+            <span class="flex items-center gap-1">
+              <img src="/assets/icons/famicons_snow.svg" class="size-[1em] opacity-80" alt="Snow" />
+              <span id="hero-snowfall">10%</span>
+            </span>
+          </div>
+        </div>
 
-				<div class="w-35 h-35 md:h-50 md:w-50 shrink-0 drop-shadow-md">
-					<img
-						id="hero-weather"
-						src=""
-						alt="Current Weather"
-						class="h-full w-full object-contain"
-					/>
-				</div>
-			</div>
-		</div>
+        <div class="size-[clamp(6.5rem,38cqw,12rem)] shrink-0 drop-shadow-md md:size-[clamp(6rem,50cqw,9rem)] xl:size-[clamp(6.5rem,38cqw,12rem)]">
+          <img
+            id="hero-weather"
+            src=""
+            alt="Current Weather"
+            class="h-full w-full object-contain"
+          />
+        </div>
+      </div>
+    </div>
 
-		<div
-			class="absolute bottom-36 left-1/2 w-64 -translate-x-1/2 z-10 pointer-events-none"
-		>
-			<img
-				id="cat-mascot"
-				src=""
-				alt="Str Cats Mascot"
-				class="h-auto w-full object-contain drop-shadow-xl"
-			/>
-		</div>
+    <!-- Mobile: sits right under the weather and ends the card. md: above the footer (content is stacked, too tall for the hill).
+		     xl: feet on the background hill, which scales with card width (~100cqw from the top). -->
+<div
+  class="relative z-10 mx-auto -mt-2 w-3/4 max-w-64 pointer-events-none md:absolute md:mt-0 md:left-1/2 md:-translate-x-1/2 md:bottom-36 md:w-3/5 xl:bottom-auto xl:top-[75cqw] xl:w-[70cqw]"
+>
+<img
+  id="cat-mascot"
+  src=""
+  alt="Str Cats Mascot"
+  class="h-auto w-full object-contain drop-shadow-xl animate-float"
+/>
+</div>
 
-		<footer class="relative z-20 mt-auto flex flex-col items-center pb-2">
-			<img
-				id="footer-logo"
-				src="/assets/logo/logo=long-black.svg"
-				alt="footer logo"
-				class="h-8 w-auto opacity-90"
-			/>
-
-			<p class="text-sm tracking-wide mt-3 text-slate-600">
-				by str Cats Studio©
-			</p>
-
-			<a
-				href="https://github.com/Cornerstone-CICCC/midterm-weather-app-str-cats"
-				target="_blank"
-				class="mt-3 text-[#4A90E2] transition hover:text-blue-700"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="currentColor"
-					viewBox="0 0 16 16"
-				>
-					<path
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path>
-				</svg>
-			</a>
-		</footer>
-	</article>
+    <!-- Mobile shows the footer at the bottom of the page instead (index.astro) -->
+    <AppFooter logoId="footer-logo" class="mt-auto hidden md:flex" />
+  </article>
 </section>

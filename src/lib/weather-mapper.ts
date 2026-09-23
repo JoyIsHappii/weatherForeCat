@@ -30,6 +30,8 @@ export function mapDailyForecast(daily: WeatherData["daily"]): DailyForecast[] {
     maxTemp: Math.round(daily.temperature_2m_max[index]),
     minTemp: Math.round(daily.temperature_2m_min[index]),
     weatherCode: daily.weather_code[index],
+    sunrise: daily.sunrise[index],
+    sunset: daily.sunset[index],
   }));
 }
 

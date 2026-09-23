@@ -22,6 +22,8 @@ export interface DailyForecast {
   maxTemp: number;
   minTemp: number;
   weatherCode: number;
+  sunrise: string;
+  sunset: string;
 }
 
 export interface HourlyForecast {

@@ -2,6 +2,24 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
+/* Short laptop screens (e.g. 1280x720, 1366x768): tighten spacing so the desktop layout fits without scrolling */
+@custom-variant short (@media (max-height: 800px));
+
 @theme {
   --font-roboto: "Roboto", sans-serif;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
 }

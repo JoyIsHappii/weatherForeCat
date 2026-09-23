@@ -1,55 +1,27 @@
 ---
-
+// On md+ the card stretches to fill the rest of the column, and the rows share that height evenly
+const details = [
+  { id: "hero-humidity", label: "Humidity", icon: "/assets/icons/humidity.svg", placeholder: "-- %" },
+  { id: "hero-wind", label: "Wind", icon: "/assets/icons/wind.svg", placeholder: "-- km/h" },
+  { id: "hero-air-quality", label: "Air Quality", icon: "/assets/icons/entypo_air.svg", placeholder: "--" },
+  { id: "hero-uv", label: "UV Index", icon: "/assets/icons/mdi_uv-ray.svg", placeholder: "--" },
+];
 ---
 
 <div
-  class="bg-white rounded-3xl font-roboto text-center px-6 py-3 shadow-inner shadow-black/50 flex flex-col w-full"
+  class="bg-white/90 rounded-3xl font-roboto px-5 lg:px-6 py-2 shadow-inner shadow-black/50 flex flex-col w-full md:flex-1 md:min-h-0"
 >
-  <div
-    class="flex items-center flex-row justify-between border-b border-[#DBE2E6] py-2"
-  >
-    <span class="text-gray-700 lg:text-xl font-semibold flex flex-row gap-2.5">
-      <img
-        src="/assets/icons/humidity.svg"
-        alt="Humidity"
-        class="w-5 h-5 lg:w-8 lg:h-8"
-      /> Humidity
-    </span>
-    <span id="hero-humidity" class="text-black lg:text-xl">-- %</span>
-  </div>
-  <div
-    class="flex items-center flex-row justify-between border-b border-[#DBE2E6] py-2"
-  >
-    <span class="text-gray-700 lg:text-xl font-semibold flex flex-row gap-2.5">
-      <img
-        src="/assets/icons/wind.svg"
-        alt="Wind"
-        class="w-5 h-5 lg:w-8 lg:h-8"
-      /> Wind
-    </span>
-    <span id="hero-wind" class="text-black lg:text-xl">-- km/h</span>
-  </div>
-  <div
-    class="flex items-center flex-row justify-between border-b border-[#DBE2E6] py-2"
-  >
-    <span class="text-gray-700 lg:text-xl font-semibold flex flex-row gap-2.5">
-      <img
-        src="/assets/icons/entypo_air.svg"
-        alt="Air Quality"
-        class="w-5 h-5 lg:w-8 lg:h-8"
-      /> Air Quality
-    </span>
-    <span id="hero-air-quality" class="text-black lg:text-xl">-- AQI</span>
-  </div>
-
-  <div class="flex items-center flex-row justify-between py-2">
-    <span class="text-gray-700 lg:text-xl font-semibold flex flex-row gap-2.5">
-      <img
-        src="/assets/icons/mdi_uv-ray.svg"
-        alt="UV Index"
-        class="w-5 h-5 lg:w-8 lg:h-8"
-      /> UV Index
-    </span>
-    <span id="hero-uv" class="text-black lg:text-xl">--</span>
-  </div>
+  {
+    details.map((detail) => (
+      <div class="flex flex-1 items-center justify-between gap-3 py-2 short:py-1 border-b border-[#DBE2E6] last:border-b-0">
+        <span class="flex items-center gap-3 text-base lg:text-lg 2xl:text-xl font-semibold text-gray-700">
+          <img src={detail.icon} alt="" class="size-6 lg:size-7 2xl:size-8 shrink-0" />
+          {detail.label}
+        </span>
+        <span id={detail.id} class="text-base lg:text-lg 2xl:text-xl text-gray-700 text-right">
+          {detail.placeholder}
+        </span>
+      </div>
+    ))
+  }
 </div>

@@ -13,6 +13,7 @@ import HoursCard from "../components/HoursCard.astro";
 
 import SunRiseSet from "../components/SunRiseSet.astro";
 import WeatherDetails from "../components/WeatherDetails.astro";
+import AppFooter from "../components/AppFooter.astro";
 
 import { getWeatherInfo } from "../lib/weather";
 
@@ -38,6 +39,8 @@ const placeholderDaily = Array.from({ length: 5 }).map((_, i) => ({
   maxTemp: 0,
   minTemp: 0,
   weatherCode: 0,
+  sunrise: "",
+  sunset: "",
 }));
 ---
 
@@ -68,18 +71,18 @@ const placeholderDaily = Array.from({ length: 5 }).map((_, i) => ({
       </div>
     </div>
 
-    <main id="desktop-layout" class="hidden md:grid grid-cols-3 gap-4 min-h-screen pt-8 px-15 bg-cover bg-center bg-no-repeat bg-fixed">
+    <main id="desktop-layout" class="hidden md:grid grid-cols-3 grid-rows-[minmax(0,1fr)] gap-4 h-screen pt-8 pb-8 px-15 bg-cover bg-center bg-no-repeat bg-fixed" >
       <!-- `Col 1` -->
       <header class="flex flex-col flex-1 h-full">
         <CurrentWeather />
       </header>
       <!-- `Col 2`  -->
-      <section class="flex flex-col gap-6 flex-1 h-full">
+      <section class="flex flex-col gap-6 short:gap-3 flex-1 h-full min-h-0">
         <!--  > Favourite Cities Dropdown -->
         <FavCitiesDropdown />
         <!-- > 5 Day Forecast -->
-        <div class="max-w-150 w-full bg-white rounded-3xl p-5 shadow-inner shadow-black/50">
-          <h3 class="text-xl lg:text-2xl font-bold text-gray-700 tracking-tight mb-4 ml-2">5 Day Forecast</h3>
+        <div class="max-w-150 w-full bg-white/90 rounded-3xl p-5 short:p-4 shadow-inner shadow-black/50">
+          <h3 class="text-xl lg:text-2xl font-bold text-gray-700 tracking-tight mb-4 short:mb-2 ml-2">5 Day Forecast</h3>
           <div id="daily-forecast-container" class="flex flex-col gap-2 font-roboto md:flex-row items-stretch w-full overflow-hidden border-none divide-none">
             {placeholderDaily.map((forecast) => <DayCard forecast={forecast} />)}
           </div>
@@ -90,10 +93,10 @@ const placeholderDaily = Array.from({ length: 5 }).map((_, i) => ({
         <WeatherDetails />
       </section>
       <!-- `Col 3` -->
-      <section class="h-[90%] flex flex-col">
+      <section class="h-full min-h-0 flex flex-col">
         <!-- > Searchbar -->
         <SearchBar />
-        <div id="hourly-range-container" class="flex-1 flex flex-col h-full">
+        <div class="flex-1 min-h-0 flex flex-col">
           <HoursCard />
         </div>
       </section>
@@ -110,7 +113,7 @@ const placeholderDaily = Array.from({ length: 5 }).map((_, i) => ({
       <CurrentWeather />
       
       <!-- > 5 Days forecast -->
-      <div class="bg-white rounded-3xl p-4 shadow-md">
+      <div class="bg-white/90 rounded-3xl p-4 shadow-md">
         <h3 class="text-lg font-bold text-gray-700 mb-2">5-Day Forecast</h3>
         <div class="flex flex-row overflow-x-auto gap-2">
           {placeholderDaily.map((forecast) => <DayCard forecast={forecast} />)}
@@ -120,6 +123,9 @@ const placeholderDaily = Array.from({ length: 5 }).map((_, i) => ({
       <HoursCard />
       <SunRiseSet />
       <WeatherDetails />
+
+      <!-- > Footer (inside the hero card on desktop) -->
+      <AppFooter class="mt-6 pt-6 border-t border-dotted border-slate-400/60" />
     </main>
     
   </body>

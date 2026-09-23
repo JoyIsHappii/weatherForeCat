@@ -46,6 +46,8 @@ let selectedCity: SelectedCity = { ...FALLBACK_CITY };
 let favoritesCache: FavoriteCity[] = loadFavorites();
 // Application state for layout mappings
 let allHourlyData: HourlyForecast[] = [];
+// Current local time of the selected city (YYYY-MM-DDTHH:MM), used to highlight the current 3-hour slot
+let currentLocalTime = "";
 
 // Active layout context (e.g., desktop vs mobile) for dynamic UI updates; initialized on DOM ready
 let $activeLayoutContext: JQuery<HTMLElement>;
@@ -102,6 +104,12 @@ function updateHourlyUI(targetDate: string): void {
   );
   const $hourItems = $(".hour-item", $activeLayoutContext);
 
+  // On today, the current slot is the last one that has already started
+  const isToday = currentLocalTime.startsWith(targetDate);
+  const currentSlotIndex = isToday
+    ? filteredHourly.filter((item) => item.time <= currentLocalTime).length - 1
+    : -1;
+
   $hourItems.each((index, element) => {
     const $item = $(element);
     const data = filteredHourly[index];
@@ -114,14 +122,46 @@ function updateHourlyUI(targetDate: string): void {
       });
       const emoji = getWeatherEmoji(data.weatherCode);
 
-      $item.find(".hour-time").text(timeLabel);
+      $item
+        .find(".hour-time")
+        .text(timeLabel)
+        .toggleClass("text-[#57A0EE] font-bold", index === currentSlotIndex)
+        .toggleClass("text-gray-600 font-medium", index !== currentSlotIndex);
       $item.find(".hour-emoji").html(emoji);
-      $item.find(".hour-temp").text(`${data.temperature}°`);
+      $item.find(".hour-temp")
+      .text(`${data.temperature}°`)
+      .toggleClass("text-[#57A0EE] font-bold", index === currentSlotIndex)
+      .toggleClass("text-gray-600 font-medium", index !== currentSlotIndex);
+      
       $item.show();
     } else {
       $item.hide();
     }
   });
+}
+
+/**
+ * @function updateSunUI
+ * @param {DailyForecast} day - The day whose sunrise and sunset should be shown
+ * @description Updates the Sunrise / Sunset cards for the selected day
+ */
+function updateSunUI(day: DailyForecast): void {
+  const formatTime = (timeString: string) =>
+    new Date(timeString).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  const formatDate = (timeString: string) =>
+    new Date(timeString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+
+  $("#hero-sunrise", $activeLayoutContext).text(formatTime(day.sunrise));
+  $("#hero-sunset", $activeLayoutContext).text(formatTime(day.sunset));
+  $("#hero-sunrise-date", $activeLayoutContext).text(formatDate(day.sunrise));
+  $("#hero-sunset-date", $activeLayoutContext).text(formatDate(day.sunset));
 }
 
 /** Highlight the clicked day card; remove highlight from the others. */
@@ -171,6 +211,7 @@ function updateDailyUI(daily: DailyForecast[]): void {
         const selectedDate = $(this).attr("data-date");
         if (selectedDate) {
           updateHourlyUI(selectedDate);
+          updateSunUI(data);
           setActiveDayCard($(this));
         }
       });
@@ -321,59 +362,64 @@ function renderWeatherCard(weather: WeatherData): void {
   );
 
   function getUvLevel(uv) {
-    if (uv === null || uv === undefined) return "unknown";
+    if (uv === null || uv === undefined) {
+      return { label: "unknown", color: "text-gray-500" };
+    }
 
-    if (uv <= 2) return `low (${uv})`;
-    if (uv <= 5) return `moderate (${uv})`;
-    if (uv <= 7) return `high (${uv})`;
-    if (uv <= 10) return `very-high (${uv})`;
+    if (uv <= 2) {
+      return { label: `low (${uv})`, color: "text-green-500" };
+    }
 
-    return `extreme (${uv})`;
+    if (uv <= 5) {
+      return { label: `moderate (${uv})`, color: "text-yellow-500" };
+    }
+
+    if (uv <= 7) {
+      return { label: `high (${uv})`, color: "text-orange-500" };
+    }
+
+    if (uv <= 10) {
+      return { label: `very-high (${uv})`, color: "text-red-500" };
+    }
+
+    return { label: `extreme (${uv})`, color: "text-red-700" };
   }
 
   function getAirQualityLevel(aqi) {
-    if (aqi === null || aqi === undefined) return "unknown";
+    if (aqi === null || aqi === undefined) {
+      return { label: "unknown", color: "text-gray-500" };
+    }
 
-    if (aqi <= 20) return `good (${aqi})`;
-    if (aqi <= 40) return `fair (${aqi})`;
-    if (aqi <= 60) return `moderate (${aqi})`;
-    if (aqi <= 80) return `poor (${aqi})`;
-    if (aqi <= 100) return `very poor (${aqi})`;
+    if (aqi <= 20) return { label: `good (${aqi})`, color: "text-green-500" };
+    if (aqi <= 40) return { label: `fair (${aqi})`, color: "text-lime-500" };
+    if (aqi <= 60)
+      return { label: `moderate (${aqi})`, color: "text-yellow-500" };
+    if (aqi <= 80) return { label: `poor (${aqi})`, color: "text-orange-500" };
+    if (aqi <= 100)
+      return { label: `very poor (${aqi})`, color: "text-red-500" };
 
-    return `extremely poor (${aqi})`;
+    return { label: `extremely poor (${aqi})`, color: "text-red-700" };
   }
 
-  $("#hero-uv", $activeLayoutContext).text(
-    getUvLevel(weather.current.uv_index),
-  );
+  const airQuality = getAirQualityLevel(weather.current.european_aqi);
 
-  $("#hero-air-quality", $activeLayoutContext).text(
-    getAirQualityLevel(weather.current.european_aqi),
-  );
+  $("#hero-air-quality", $activeLayoutContext)
+    .text(airQuality.label)
+    .removeClass(
+      "text-green-500 text-green-400 text-yellow-500 text-red-500 text-red-600 text-red-700 text-gray-500",
+    )
+    .addClass(airQuality.color);
 
-  $("#hero-uv", $activeLayoutContext).text(
-    getUvLevel(weather.current.uv_index),
-  );
+  const uvLevel = getUvLevel(weather.current.uv_index);
 
-  $("#hero-air-quality", $activeLayoutContext).text(
-    getAirQualityLevel(weather.current.european_aqi),
-  );
+  $("#hero-uv", $activeLayoutContext)
+    .text(uvLevel.label)
+    .removeClass(
+      "text-green-500 text-yellow-500 text-orange-500 text-red-500 text-red-700 text-gray-500",
+    )
+    .addClass(uvLevel.color);
 
-  // Format Sunrise and Sunset
-  const sunriseRaw = weather.daily.sunrise[0];
-  const sunsetRaw = weather.daily.sunset[0];
-
-  const formatTime = (timeString: string) => {
-    return new Date(timeString).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
-  $("#hero-sunrise", $activeLayoutContext).text(formatTime(sunriseRaw));
-  $("#hero-sunset", $activeLayoutContext).text(formatTime(sunsetRaw));
-
+  currentLocalTime = weather.current.time;
   const nowTime = new Date(weather.current.time).getTime();
   const sunriseTime = new Date(weather.daily.sunrise[0]).getTime();
   const sunsetTime = new Date(weather.daily.sunset[0]).getTime();
@@ -480,7 +526,8 @@ function renderWeatherCard(weather: WeatherData): void {
   // Initialize Hourly Panel state mapping
   if (dailyForecasts.length > 0) {
     updateHourlyUI(dailyForecasts[0].date);
-    setActiveDayCard($(".day-card").first());
+    updateSunUI(dailyForecasts[0]);
+    setActiveDayCard($(".day-card", $activeLayoutContext).first());
   }
 }
 

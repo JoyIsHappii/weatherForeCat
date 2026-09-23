@@ -9,8 +9,17 @@ interface Props {
 const { forecast } = Astro.props;
 ---
 
-<div class="day-card flex-1 min-w-0 flex flex-col items-center justify-between p-2 cursor-pointer hover:shadow-inner rounded-lg lg:rounded-2xl transition-all duration-300 text-center [&.active]:bg-gray-100 shadow-black/50 [&.active]:shadow-inner border-none! [&.active]:rounded-[24px]" data-date={forecast.date}>
-  
+<div
+  class="day-card flex-1 min-w-0 flex flex-col items-center justify-between p-2 cursor-pointer
+  hover:shadow-inner hover:bg-white/90
+  rounded-3xl transition-all duration-300 text-center
+  [&.active]:bg-white/90
+  [&.active]:shadow-inner
+  [&.active]:shadow-black/50
+  [&.active]:border-none
+  [&.active]:rounded-[24px]"
+  data-date={forecast.date}
+>  
   <div class="day-name text-center  font-black text-gray-700 tracking-tight mb-2">
     <span class="block text-sm md:text-lg font-semibold">--</span>
     <span class="block text-xs md:text-base text-gray-400 font-normal mt-0.5">--/--</span>
@@ -19,8 +28,9 @@ const { forecast } = Astro.props;
   <div class="weather-icon-temp flex items-center justify-center my-1 w-16 h-16">
     </div>
 
-  <div class="temp-range flex md:flex-col items-center gap-0.5 mt-2 text-xs">
-    <span class="max-temp text-lg font-extrabold text-gray-700">--°</span>
+  <div class="temp-range flex md:flex-row items-center gap-0.5 mt-2 text-xs">
+    <span class="max-temp text-base font-medium text-gray-700">--°</span>
+    <!-- <span class="text-gray-400 text-xs">/</span> -->
     <span class="min-temp text-base font-medium text-gray-400">--°</span>
   </div>
 </div>
