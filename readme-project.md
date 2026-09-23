@@ -135,6 +135,19 @@ npm run dev
 
 > ⚠️ **Note:** Do not try to open files directly from the `src/pages/` or `public/` directories using extensions like "Live Server". Astro components must be processed by the local development server pipeline to render properly.
 
+### Netlify deployment
+
+Netlify should use the repository root as the base directory. The included `netlify.toml` configures:
+
+- Build command: `npm run build`
+- Publish directory: `dist`
+- Node.js: `22.12.0`
+
+In Netlify, open **Site configuration → Environment variables** and add
+`PUBLIC_PLACEKIT_API_KEY` with the key from PlaceKit. Use the `Production` scope
+and trigger a new deploy after saving it. The variable must be present during
+the build because Astro embeds `PUBLIC_` variables in the browser bundle.
+
 ---
 ### Responsive Design
 The site is responsive, adapting to desktop and mobile layouts

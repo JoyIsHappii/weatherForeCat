@@ -361,7 +361,7 @@ function renderWeatherCard(weather: WeatherData): void {
     `${weather.current.relative_humidity_2m} %`,
   );
 
-  function getUvLevel(uv) {
+  function getUvLevel(uv: number | null) {
     if (uv === null || uv === undefined) {
       return { label: "unknown", color: "text-gray-500" };
     }
@@ -385,7 +385,7 @@ function renderWeatherCard(weather: WeatherData): void {
     return { label: `extreme (${uv})`, color: "text-red-700" };
   }
 
-  function getAirQualityLevel(aqi) {
+  function getAirQualityLevel(aqi: number | null) {
     if (aqi === null || aqi === undefined) {
       return { label: "unknown", color: "text-gray-500" };
     }
@@ -797,7 +797,11 @@ export async function initWeatherApp(): Promise<void> {
       },
     });
   } catch (error) {
-    // TODO: Implement a user-friendly error display in the UI
+    const message =
+      error instanceof Error ? error.message : "Could not initialize weather app.";
+    $("#hero-status", $activeLayoutContext)
+      .removeClass("hidden")
+      .text(message);
   } finally {
     setTimeout(() => {
       hideLoading();

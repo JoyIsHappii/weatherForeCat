@@ -56,7 +56,8 @@ interface CurrentData {
   wind_speed_10m: number;
   rain: number;
   relative_humidity_2m: number;
-  uv_index: number;
+  uv_index: number | null;
+  european_aqi: number | null;
   precipitation: number;
   snowfall: number;
 }
