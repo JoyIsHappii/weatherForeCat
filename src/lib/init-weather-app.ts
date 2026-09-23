@@ -661,7 +661,7 @@ export function getWeatherEmoji(code: number): string {
   else if ([85, 86].includes(code)) assetName = "85,86.svg";
   else if (code >= 95) assetName = "95,96,99.svg";
 
-  return `<img src="/assets/weather-static/${assetName}" alt="Weather Icon" class="w-14 h-14 object-contain object-center" />`;
+  return `<img src="/assets/weather-animated/${assetName}" alt="Weather Icon" class="w-14 h-14 object-contain object-center" />`;
 }
 
 /**
